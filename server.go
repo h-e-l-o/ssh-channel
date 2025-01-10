@@ -49,6 +49,7 @@ AAAEAmNUR8Je/cLvuCRkIEl8EYr0Y/4xMezReHzKFt+oI8RrWnr77eJ9MYj+lm+uN+WsOD
 		}
 		fmt.Printf("Got message: length %+v, msg: %+v\n", n, string(buf))
                 time.Sleep(1000 * time.Millisecond)
+		buf = nil
 
 	}
 }
