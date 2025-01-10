@@ -2,19 +2,19 @@ package main
 
 import (
 	"net"
-	"strings"
+        "fmt"
+	//"strings"
 	"time"
 
-	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh"
 )
 
 func main() {
-	log.Infof("Client started")
+	fmt.Println("Client started")
 
 	netConn, err := net.Dial("tcp", "127.0.0.1:30000")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	sshConfig := ssh.ClientConfig{
@@ -29,15 +29,21 @@ func main() {
 
 	c, _, _ := sshConn.OpenChannel("control", []byte{})
 
-	msg := strings.Repeat("a", 50)
+	//msg := strings.Repeat("a", 50)
+        count := 0
 	for {
-		log.Infof("Writing message '%+v' to channel...\n", msg)
-		_, err := c.Write([]byte(msg))
+	        msg := fmt.Sprintf("%d a", count)
+		fmt.Printf("Writing message '%+v' to channel...\n", msg)
+		n, err := c.Write([]byte(msg))
+                count += 1
 
 		if err != nil {
-			log.Fatalf("Error writing to channel: %+v\n", err)
+			panic(fmt.Sprintf("Error writing to channel: %+v", err))
 		}
-		time.Sleep(2 * time.Millisecond)   //**************************
+                if n != len(msg) {
+                        panic(fmt.Sprintf("Wrote %d bytes instead of %d\n", n, len(msg)))
+                }
+		time.Sleep(300 * time.Millisecond)   //**************************
 	}
 
 }
