@@ -40,9 +40,8 @@ AAAEAmNUR8Je/cLvuCRkIEl8EYr0Y/4xMezReHzKFt+oI8RrWnr77eJ9MYj+lm+uN+WsOD
 
 	c, _, _ := newChannel.Accept()
 
-	buf := make([]byte, 4096)
-
 	for {
+	        buf := make([]byte, 4096)
 		n, err := c.Read(buf)
 		if err != nil {
 			panic(fmt.Sprintf("Error reading from channel: %+v", err))
