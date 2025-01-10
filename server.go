@@ -1,12 +1,9 @@
-// server code
-
 package main
 
 import (
 	"fmt"
 	"net"
-
-	log "github.com/sirupsen/logrus"
+        "time"
 
 	"golang.org/x/crypto/ssh"
 )
@@ -34,7 +31,7 @@ AAAEAmNUR8Je/cLvuCRkIEl8EYr0Y/4xMezReHzKFt+oI8RrWnr77eJ9MYj+lm+uN+WsOD
 	private, _ := ssh.ParsePrivateKey(privateBytes)
 	sshConfig.AddHostKey(private)
 
-	log.Info("Listening...")
+	fmt.Println("Listening...")
 	listener, _ := net.Listen("tcp", "127.0.0.1:30000")
 	netConn, _ := listener.Accept()
 	_, chans, _, _ := ssh.NewServerConn(netConn, &sshConfig)
@@ -48,10 +45,10 @@ AAAEAmNUR8Je/cLvuCRkIEl8EYr0Y/4xMezReHzKFt+oI8RrWnr77eJ9MYj+lm+uN+WsOD
 	for {
 		n, err := c.Read(buf)
 		if err != nil {
-			log.Fatalf("Error reading from channel: %+v\n", err)
+			panic(fmt.Sprintf("Error reading from channel: %+v", err))
 		}
-		log.Infof("Got message: length %+v, msg: %+v\n", n, string(buf))
+		fmt.Printf("Got message: length %+v, msg: %+v\n", n, string(buf))
+                time.Sleep(1000 * time.Millisecond)
 
 	}
 }
-
